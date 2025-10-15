@@ -1,8 +1,8 @@
 USER_ID=$(shell id -u)
 
 DC = @USER_ID=$(USER_ID) docker-compose
-DC_RUN = ${DC} run --rm sio_test
-DC_EXEC = ${DC} exec sio_test
+DC_RUN = ${DC} run --rm sio_app
+DC_EXEC = ${DC} exec sio_app
 
 PHONY: help
 .DEFAULT_GOAL := help

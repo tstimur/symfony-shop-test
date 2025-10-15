@@ -1,8 +1,8 @@
 USER_ID=$(shell id -u)
 
 DC = @USER_ID=$(USER_ID) docker-compose
-DC_RUN = ${DC} run --rm sio_app
-DC_EXEC = ${DC} exec sio_app
+DC_RUN = ${DC} run --rm php-fpm
+DC_EXEC = ${DC} exec php-fpm
 
 PHONY: help
 .DEFAULT_GOAL := help

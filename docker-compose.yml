@@ -12,7 +12,9 @@ services:
             - php-fpm
 
     php-fpm:
-        build: docker/Dockerfile
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
         container_name: sio_app
         restart: always
         volumes:

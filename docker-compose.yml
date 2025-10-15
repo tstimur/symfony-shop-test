@@ -10,9 +10,9 @@ services:
         restart: always
         depends_on:
             - php-fpm
-            - db
+
     php-fpm:
-        build: docker
+        build: docker/Dockerfile
         container_name: sio_app
         restart: always
         volumes:
@@ -20,6 +20,8 @@ services:
             - .:/var/www/html
         env_file:
             - .env
+        depends_on:
+            - db
 
     db:
         image: postgres:15-alpine

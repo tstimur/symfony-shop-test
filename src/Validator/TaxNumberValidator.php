@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Validator;
 
 use Symfony\Component\Validator\Constraint;
@@ -15,12 +17,6 @@ final class TaxNumberValidator extends ConstraintValidator
         'FR' => '/^FR[A-Z]{2}\d{9}$/',
     ];
 
-    /**
-     * @param mixed $value
-     * @param Constraint $constraint
-     *
-     * @return void
-     */
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof ValidTaxNumber) {
@@ -37,7 +33,7 @@ final class TaxNumberValidator extends ConstraintValidator
 
         $countryCode = substr($value, 0, 2);
 
-        if (! isset(self::TAX_PATTERNS[$countryCode])) {
+        if (!isset(self::TAX_PATTERNS[$countryCode])) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ value }}', $value)
                 ->addViolation();

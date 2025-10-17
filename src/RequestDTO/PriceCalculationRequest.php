@@ -7,7 +7,7 @@ namespace App\RequestDTO;
 use App\Validator\ValidTaxNumber;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class PriceCalculationRequest
+final class PriceCalculationRequest
 {
     #[Assert\NotBlank(message: 'Product ID is required')]
     #[Assert\Type('integer', message: 'Product ID must be an integer')]

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\TaxRate;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,28 +19,20 @@ class TaxRateRepository extends ServiceEntityRepository
         parent::__construct($registry, TaxRate::class);
     }
 
-    //    /**
-    //     * @return TaxRate[] Returns an array of TaxRate objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('t.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?TaxRate
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /*
+     * Поиск налоговой ставки для страны на конкретную дату
+     */
+   public function findByCountryCodeAndDate(string $countryCode, DateTime $date): ?TaxRate
+   {
+       return $this->createQueryBuilder('t')
+           ->andWhere('t.countryCode = :countryCode')
+           ->andWhere('t.effectiveFrom <= :date')
+           ->andWhere('t.effectiveUntil IS NULL OR t.effectiveUntil > :date')
+           ->setParameter('countryCode', $countryCode)
+           ->setParameter('date', $date)
+           ->orderBy('t.effectiveFrom', 'DESC')
+           ->setMaxResults(1)
+           ->getQuery()
+           ->getOneOrNullResult();
+   }
 }

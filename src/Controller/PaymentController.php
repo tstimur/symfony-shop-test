@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,8 +29,6 @@ final class PaymentController extends AbstractController
     #[Route('/purchase', methods: ['POST'])]
     public function purchase(Request $request): JsonResponse
     {
-
-
         return $this->json([]);
     }
 }

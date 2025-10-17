@@ -38,5 +38,11 @@ final class TaxNumberValidator extends ConstraintValidator
                 ->setParameter('{{ value }}', $value)
                 ->addViolation();
         }
+
+        if (!preg_match(self::TAX_PATTERNS[$countryCode], $value)) {
+            $this->context->buildViolation($constraint->message)
+                ->setParameter('{{ value }}', $value)
+                ->addViolation();
+        }
     }
 }

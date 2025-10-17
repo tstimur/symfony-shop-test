@@ -33,12 +33,12 @@ class TaxRate
         return $this->id;
     }
 
-    public function getCountry(): ?string
+    public function getCountryCode(): ?string
     {
         return $this->countryCode;
     }
 
-    public function setCountry(string $countryCode): static
+    public function setCountryCode(string $countryCode): static
     {
         $this->countryCode = $countryCode;
 

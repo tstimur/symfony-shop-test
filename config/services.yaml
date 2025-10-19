@@ -52,3 +52,7 @@ services:
                   - '@App\Service\StripeProcessorAdapter'
     App\src\Request\Resolver\RequestDtoResolver:
         tags: [ 'controller.argument_value_resolver' ]
+
+    App\EventListener\ApiExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }

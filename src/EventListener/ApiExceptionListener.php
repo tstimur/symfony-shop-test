@@ -6,8 +6,6 @@ namespace App\EventListener;
 
 use App\Exception\PaymentProcessorException;
 use Psr\Log\LoggerInterface;
-use ReflectionClass;
-use ReflectionException;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,10 +17,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 final class ApiExceptionListener
 {
     public function __construct(private LoggerInterface $logger)
-    {}
+    {
+    }
 
     /**
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     #[AsEventListener]
     public function onKernelException(ExceptionEvent $event): void
@@ -49,10 +48,10 @@ final class ApiExceptionListener
         $response = new JsonResponse(
             [
                 'error' => [
-                    'type' => (new ReflectionClass($exception))->getShortName(),
+                    'type' => (new \ReflectionClass($exception))->getShortName(),
                     'message' => $exception->getMessage(),
-                    ],
-                ], $statusCode
+                ],
+            ], $statusCode
         );
 
         $event->setResponse($response);

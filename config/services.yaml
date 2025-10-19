@@ -22,3 +22,31 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # Paypal processor
+    PaypalPaymentProcessor:
+        class: PaypalProcessor
+
+    # Stripe processor
+    StripePaymentProcessor:
+        class: StripePaymentProcessor
+
+    # Adapter for PayPal
+    App\Service\PaypalProcessorAdapter:
+        arguments:
+            $processor: '@PaypalPaymentProcessor'
+
+    # Adapter for Stripe
+    App\Service\StripeProcessorAdapter:
+        arguments:
+            $processor: '@StripePaymentProcessor'
+
+    # Registry register all processors
+    App\Service\PaymentProcessorRegistry:
+        calls:
+            - register:
+                  - 'paypal'
+                  - '@App\Service\PaypalProcessorAdapter'
+            - register:
+                  - 'stripe'
+                  - '@App\Service\StripeProcessorAdapter'

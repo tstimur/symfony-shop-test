@@ -17,7 +17,8 @@ class PriceCalculatorService
         private ProductRepository $productRepository,
         private CouponRepository $couponRepository,
         private TaxService $taxService,
-    ) {}
+    ) {
+    }
 
     public function calculatePrice(
         int $productId,
@@ -28,19 +29,19 @@ class PriceCalculatorService
             ->productRepository
             ->find($productId);
 
-        if ($product === null) {
+        if (null === $product) {
             throw new NotFoundHttpException('Product not found');
         }
 
         $basePrice = $product->getPrice();
 
         $discount = '0.00';
-        if ($couponCode !== null) {
+        if (null !== $couponCode) {
             $coupon = $this
                 ->couponRepository
                 ->findOneBy(['code' => $couponCode]);
 
-            if ($coupon === null) {
+            if (null === $coupon) {
                 throw new NotFoundHttpException('Invalid coupon code');
             }
             $discount = $this->calculateDiscount($basePrice, $coupon);
@@ -63,12 +64,13 @@ class PriceCalculatorService
 
     public function calculateDiscount(string $basePrice, Coupon $coupon): string
     {
-        if ($coupon->getFixedDiscount() !== null) {
+        if (null !== $coupon->getFixedDiscount()) {
             $fixedDiscount = $coupon->getFixedDiscount();
+
             return $fixedDiscount <= $basePrice ? $fixedDiscount : $basePrice;
         }
 
-        if ($coupon->getPercentDiscount() !== null) {
+        if (null !== $coupon->getPercentDiscount()) {
             return bcmul(
                 $basePrice,
                 bcdiv($coupon->getPercentDiscount(), '100', 4),

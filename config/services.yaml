@@ -50,3 +50,5 @@ services:
             - register:
                   - 'stripe'
                   - '@App\Service\StripeProcessorAdapter'
+    App\src\Request\Resolver\RequestDtoResolver:
+        tags: [ 'controller.argument_value_resolver' ]

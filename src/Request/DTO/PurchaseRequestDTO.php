@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\RequestDTO;
+namespace App\Request\DTO;
 
 use App\Validator\ValidTaxNumber;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PriceCalculationRequestDTO
+final class PurchaseRequestDTO
 {
     #[Assert\NotBlank(message: 'Product ID is required')]
     #[Assert\Type('integer', message: 'Product ID must be an integer')]
@@ -21,4 +21,12 @@ final class PriceCalculationRequestDTO
 
     #[Assert\Type('string', message: 'Coupon code must be a string')]
     public ?string $couponCode = null;
+
+    #[Assert\NotBlank(message: 'Payment processor is required')]
+    #[Assert\Type('string', message: 'Payment processor must be a string')]
+    #[Assert\Choice(
+        choices: ['paypal', 'stripe'],
+        message: 'Payment processor must be either paypal or stripe'
+    )]
+    public ?string $paymentProcessor = null;
 }

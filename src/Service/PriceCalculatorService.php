@@ -50,7 +50,7 @@ class PriceCalculatorService
         $priceAfterDiscount = bcsub($basePrice, $discount, 2);
 
         $countryCode = $this->taxService->getCountryFromTaxNumber($taxNumber);
-        $tax = $this->taxService->calculateTax($priceAfterDiscount, $countryCode);
+        $tax = $this->taxService->calculateTax($countryCode, $priceAfterDiscount);
 
         $total = bcadd($priceAfterDiscount, $tax, 2);
 

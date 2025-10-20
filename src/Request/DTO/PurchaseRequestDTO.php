@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Request\DTO;
 
-use App\Validator\ValidTaxNumber;
+use App\Validator\TaxNumber;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class PurchaseRequestDTO
@@ -16,7 +16,7 @@ final class PurchaseRequestDTO
 
     #[Assert\NotBlank(message: 'Tax number is required')]
     #[Assert\Type('string', message: 'Tax number must be a string')]
-    #[ValidTaxNumber]
+    #[TaxNumber]
     public ?string $taxNumber = null;
 
     #[Assert\Type('string', message: 'Coupon code must be a string')]

@@ -19,8 +19,8 @@ final class TaxNumberValidator extends ConstraintValidator
 
     public function validate(mixed $value, Constraint $constraint): void
     {
-        if (!$constraint instanceof ValidTaxNumber) {
-            throw new UnexpectedTypeException($constraint, ValidTaxNumber::class);
+        if (!$constraint instanceof TaxNumber) {
+            throw new UnexpectedTypeException($constraint, TaxNumber::class);
         }
 
         if (null === $value || '' === $value) {

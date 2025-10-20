@@ -7,7 +7,7 @@ namespace App\Validator;
 use Symfony\Component\Validator\Constraint;
 
 #[\Attribute]
-class ValidTaxNumber extends Constraint
+class TaxNumber extends Constraint
 {
     public string $message = 'Invalid tax number format: "{{ value }}"';
 

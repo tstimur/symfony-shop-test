@@ -31,7 +31,6 @@ final readonly class StripeProcessorAdapter implements PaymentProcessorInterface
 
     public function supports(string $method): bool
     {
-        return $method === self::NAME;
+        return self::NAME === $method;
     }
-
 }

@@ -14,7 +14,9 @@ final readonly class PaymentProcessorRegistry
      */
     public function __construct(
         #[TaggedIterator('app.payment_processor')]
-        private readonly iterable $processors) {}
+        private readonly iterable $processors)
+    {
+    }
 
     /**
      * @throws PaymentProcessorException

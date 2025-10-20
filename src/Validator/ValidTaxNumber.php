@@ -10,4 +10,9 @@ use Symfony\Component\Validator\Constraint;
 class ValidTaxNumber extends Constraint
 {
     public string $message = 'Invalid tax number format: "{{ value }}"';
+
+    public function validatedBy(): string
+    {
+        return TaxNumberValidator::class;
+    }
 }

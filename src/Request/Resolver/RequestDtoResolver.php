@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\src\Request\Resolver;
+namespace App\Request\Resolver;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class RequestDtoResolver implements RequestDtoResolverInterface
+final class RequestDtoResolver implements ArgumentValueResolverInterface
 {
     public function __construct(
         private SerializerInterface $serializer,
@@ -26,12 +27,24 @@ final class RequestDtoResolver implements RequestDtoResolverInterface
         );
     }
 
-    public function resolve(Request $request, string $dtoClass): iterable
+    public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
+        $dtoClass = $argument->getType();
+
+        $content = $request->getContent();
+
+        if (empty($content) && !empty($request->request->all())) {
+            $content = json_encode($request->request->all());
+        }
+
+        if (empty($content)) {
+            throw new BadRequestHttpException('Empty request body');
+        }
+
         $dto = $this
             ->serializer
             ->deserialize(
-                $request->getContent(),
+                $content,
                 $dtoClass,
                 'json'
             );

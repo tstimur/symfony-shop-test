@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\EventListener;
 
 use App\Exception\PaymentProcessorException;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,18 +12,14 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\KernelEvents;
 
-#[AsEventListener]
+#[AsEventListener(event: KernelEvents::EXCEPTION)]
 final readonly class ApiExceptionListener
 {
-    public function __construct(private LoggerInterface $logger)
-    {
-    }
-
     /**
      * @throws \ReflectionException
      */
-
     public function onKernelException(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();

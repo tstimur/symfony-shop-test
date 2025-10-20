@@ -12,18 +12,19 @@ use App\Service\PriceCalculatorService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class PaymentController extends AbstractController
 {
     public function __construct(
-        private PriceCalculatorService $priceCalculatorService,
-        private PaymentProcessorRegistry $paymentProcessorRegistry,
+        private readonly PriceCalculatorService $priceCalculatorService,
+        private readonly PaymentProcessorRegistry $paymentProcessorRegistry,
     ) {
     }
 
     #[Route('/calculate-price', methods: ['POST'])]
-    public function calculatePrice(PriceCalculationRequestDTO $dto): JsonResponse
+    public function calculatePrice(#[MapRequestPayload] PriceCalculationRequestDTO $dto): JsonResponse
     {
         $priceData = $this
             ->priceCalculatorService
@@ -46,7 +47,7 @@ final class PaymentController extends AbstractController
      * @throws \Exception
      */
     #[Route('/purchase', methods: ['POST'])]
-    public function purchase(PurchaseRequestDTO $dto): JsonResponse
+    public function purchase(#[MapRequestPayload] PurchaseRequestDTO $dto): JsonResponse
     {
         $priceData = $this->priceCalculatorService->calculatePrice(
             $dto->product,

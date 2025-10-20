@@ -50,6 +50,7 @@ final class ApiExceptionListener
                 'error' => [
                     'type' => (new \ReflectionClass($exception))->getShortName(),
                     'message' => $exception->getMessage(),
+                    'trace' => $exception->getTraceAsString(),
                 ],
             ], $statusCode
         );

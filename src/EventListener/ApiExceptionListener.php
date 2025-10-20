@@ -14,7 +14,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-final class ApiExceptionListener
+#[AsEventListener]
+final readonly class ApiExceptionListener
 {
     public function __construct(private LoggerInterface $logger)
     {
@@ -23,20 +24,10 @@ final class ApiExceptionListener
     /**
      * @throws \ReflectionException
      */
-    #[AsEventListener]
+
     public function onKernelException(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
-
-        $this
-            ->logger
-            ->error(
-                $exception->getMessage(),
-                [
-                    'exception' => $exception,
-                    'trace' => $exception->getTraceAsString(),
-                ]
-            );
 
         $statusCode = match (true) {
             $exception instanceof BadRequestHttpException || $exception instanceof PaymentProcessorException => Response::HTTP_BAD_REQUEST,

@@ -7,8 +7,10 @@ namespace App\Service;
 use App\Exception\PaymentProcessorException;
 use Systemeio\TestForCandidates\PaymentProcessor\StripePaymentProcessor;
 
-final class StripeProcessorAdapter implements PaymentProcessorInterface
+final readonly class StripeProcessorAdapter implements PaymentProcessorInterface
 {
+    public const string NAME = 'stripe';
+
     public function __construct(
         private StripePaymentProcessor $processor,
     ) {
@@ -26,4 +28,10 @@ final class StripeProcessorAdapter implements PaymentProcessorInterface
             throw new PaymentProcessorException('Failed to process payment', StripePaymentProcessor::class);
         }
     }
+
+    public function supports(string $method): bool
+    {
+        return $method === self::NAME;
+    }
+
 }

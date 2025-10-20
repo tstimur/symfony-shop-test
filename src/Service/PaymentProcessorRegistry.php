@@ -5,37 +5,28 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Exception\PaymentProcessorException;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class PaymentProcessorRegistry
+final readonly class PaymentProcessorRegistry
 {
-    private array $processors = [];
-
-    public function register(
-        string $name,
-        PaymentProcessorInterface $processor,
-    ): void {
-        $this->processors[$name] = $processor;
-    }
+    /**
+     * @param iterable<PaymentProcessorInterface> $processors
+     */
+    public function __construct(
+        #[TaggedIterator('app.payment_processor')]
+        private readonly iterable $processors) {}
 
     /**
      * @throws PaymentProcessorException
      */
-    public function get(string $name): PaymentProcessorInterface
+    public function get(string $method): PaymentProcessorInterface
     {
-        if (!isset($this->processors[$name])) {
-            throw new PaymentProcessorException('Processor "'.$name.'" not found');
+        foreach ($this->processors as $processor) {
+            if ($processor->supports($method)) {
+                return $processor;
+            }
         }
 
-        return $this->processors[$name];
-    }
-
-    public function has(string $name): bool
-    {
-        return isset($this->processors[$name]);
-    }
-
-    public function getAll(): array
-    {
-        return array_keys($this->processors);
+        throw new PaymentProcessorException('Processor "'.$method.'" not found');
     }
 }

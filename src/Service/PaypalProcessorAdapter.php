@@ -6,12 +6,13 @@ namespace App\Service;
 
 use Systemeio\TestForCandidates\PaymentProcessor\PaypalPaymentProcessor;
 
-final class PaypalProcessorAdapter implements PaymentProcessorInterface
+final readonly class PaypalProcessorAdapter implements PaymentProcessorInterface
 {
+    public const string NAME = 'paypal';
+
     public function __construct(
         private PaypalPaymentProcessor $processor,
-    ) {
-    }
+    ) {}
 
     public function process(string $amount): void
     {
@@ -20,5 +21,10 @@ final class PaypalProcessorAdapter implements PaymentProcessorInterface
         $this
             ->processor
             ->pay($priceInCents);
+    }
+
+    public function supports(string $method): bool
+    {
+        return $method === self::NAME;
     }
 }

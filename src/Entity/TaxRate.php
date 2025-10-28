@@ -25,15 +25,14 @@ class TaxRate
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
     private \DateTimeImmutable $effectiveFrom;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE,nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $effectiveUntil = null;
 
     public function __construct(
         string $countryCode,
         string $rate,
         \DateTimeImmutable $effectiveFrom,
-    )
-    {
+    ) {
         $this->countryCode = $countryCode;
         $this->rate = $rate;
         $this->effectiveFrom = $effectiveFrom;

@@ -29,9 +29,8 @@ class Coupon
     public function __construct(
         string $code,
         CouponType $type,
-        string $value
-    )
-    {
+        string $value,
+    ) {
         $this->code = $code;
         $this->type = $type;
         $this->value = $value;
@@ -62,6 +61,7 @@ class Coupon
     public function setType(CouponType $type): static
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -73,6 +73,7 @@ class Coupon
     public function setValue(string $value): static
     {
         $this->value = $value;
+
         return $this;
     }
 }

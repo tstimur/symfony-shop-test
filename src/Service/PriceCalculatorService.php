@@ -9,7 +9,7 @@ use App\Repository\CouponRepository;
 use App\Repository\ProductRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class PriceCalculatorService
+final class PriceCalculatorService
 {
     private const string DISCOUNT_ZERO = '0.00';
 

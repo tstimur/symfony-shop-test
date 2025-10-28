@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Enum\CouponType;
 use App\Repository\CouponRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,13 +18,24 @@ class Coupon
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $code = null;
+    private string $code;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
-    private ?string $fixedDiscount = null;
+    #[ORM\Column(type: 'string', enumType: CouponType::class)]
+    private CouponType $type;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2, nullable: true)]
-    private ?string $percentDiscount = null;
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private string $value;
+
+    public function __construct(
+        string $code,
+        CouponType $type,
+        string $value
+    )
+    {
+        $this->code = $code;
+        $this->type = $type;
+        $this->value = $value;
+    }
 
     public function getId(): ?int
     {
@@ -42,27 +54,25 @@ class Coupon
         return $this;
     }
 
-    public function getFixedDiscount(): ?string
+    public function getType(): CouponType
     {
-        return $this->fixedDiscount;
+        return $this->type;
     }
 
-    public function setFixedDiscount(?string $fixedDiscount): static
+    public function setType(CouponType $type): static
     {
-        $this->fixedDiscount = $fixedDiscount;
-
+        $this->type = $type;
         return $this;
     }
 
-    public function getPercentDiscount(): ?string
+    public function getValue(): string
     {
-        return $this->percentDiscount;
+        return $this->value;
     }
 
-    public function setPercentDiscount(?string $percentDiscount): static
+    public function setValue(string $value): static
     {
-        $this->percentDiscount = $percentDiscount;
-
+        $this->value = $value;
         return $this;
     }
 }

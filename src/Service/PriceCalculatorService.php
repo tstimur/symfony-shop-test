@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Coupon;
+use App\Enum\CouponType;
 use App\Repository\CouponRepository;
 use App\Repository\ProductRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -35,7 +36,7 @@ final class PriceCalculatorService
 
         $basePrice = $product->getPrice();
 
-        $discount = '0.00';
+        $discount = self::DISCOUNT_ZERO;
         if (null !== $couponCode) {
             $coupon = $this
                 ->couponRepository
@@ -64,20 +65,20 @@ final class PriceCalculatorService
 
     public function calculateDiscount(string $basePrice, Coupon $coupon): string
     {
-        if (null !== $coupon->getFixedDiscount()) {
-            $fixedDiscount = $coupon->getFixedDiscount();
+        return match ($coupon->getType()) {
+            CouponType::FIXED => $this->calculateFixedDiscount($basePrice, $coupon->getValue()),
+            CouponType::PERCENT => $this->calculatePercentDiscount($basePrice, $coupon->getValue()),
+            default => self::DISCOUNT_ZERO,
+        };
+    }
 
-            return $fixedDiscount <= $basePrice ? $fixedDiscount : $basePrice;
-        }
+    private function calculateFixedDiscount(string $basePrice, string $value): string
+    {
+        return bccomp($value, $basePrice, 2) <= 0 ? $value : $basePrice;
+    }
 
-        if (null !== $coupon->getPercentDiscount()) {
-            return bcmul(
-                $basePrice,
-                bcdiv($coupon->getPercentDiscount(), '100', 4),
-                2
-            );
-        }
-
-        return self::DISCOUNT_ZERO;
+    private function calculatePercentDiscount(string $basePrice, string $value): string
+    {
+        return bcmul($basePrice, bcdiv($value, '100', 4), 2);
     }
 }

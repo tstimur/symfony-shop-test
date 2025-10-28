@@ -16,17 +16,28 @@ class TaxRate
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 2)]
-    private ?string $countryCode = null;
+    #[ORM\Column(length: 2, nullable: false)]
+    private string $countryCode;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]
-    private ?string $rate = null;
+    private string $rate;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $effectiveFrom = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
+    private \DateTimeImmutable $effectiveFrom;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE,nullable: true)]
     private ?\DateTimeImmutable $effectiveUntil = null;
+
+    public function __construct(
+        string $countryCode,
+        string $rate,
+        \DateTimeImmutable $effectiveFrom,
+    )
+    {
+        $this->countryCode = $countryCode;
+        $this->rate = $rate;
+        $this->effectiveFrom = $effectiveFrom;
+    }
 
     public function getId(): ?int
     {
@@ -45,7 +56,7 @@ class TaxRate
         return $this;
     }
 
-    public function getRate(): ?string
+    public function getRate(): string
     {
         return $this->rate;
     }
@@ -57,7 +68,7 @@ class TaxRate
         return $this;
     }
 
-    public function getEffectiveFrom(): ?\DateTimeImmutable
+    public function getEffectiveFrom(): \DateTimeImmutable
     {
         return $this->effectiveFrom;
     }
